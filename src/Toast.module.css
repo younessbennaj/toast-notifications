@@ -1,24 +1,34 @@
-/* add slideIn animation */
+/* add slideIn animation from top to bottom */
 @keyframes slideIn {
   from {
-    transform: translateY(100%);
+    transform: translateY(-100%);
   }
   to {
     transform: translateY(0);
   }
 }
 
+.closeButton {
+  background: none;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  border-radius: 2px;
+}
+
 .toast {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  padding: 16px;
+  padding: 16px 24px 20px 16px;
   width: 300px;
   position: fixed;
-  bottom: 16px;
+  top: 16px;
   right: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: #fff;
   animation: slideIn 0.3s;
 }

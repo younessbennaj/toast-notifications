@@ -1,58 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
-import styles from "./Toast.module.css";
-
-function Toast({
-  message,
-  onOpenChange,
-}: {
-  message: string;
-  onOpenChange: (isOpen: boolean) => void;
-}) {
-  const [loadingPercentage, setLoadingPercentage] = React.useState<number>(0);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onOpenChange(false);
-    }, 5000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [onOpenChange]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLoadingPercentage((prev) => {
-        if (prev >= 100) {
-          return 100;
-        }
-        return prev + 1;
-      });
-    }, 50);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  return (
-    <div className={styles.toast}>
-      <div>
-        <p>{message}</p>
-        <button
-          onClick={() => {
-            onOpenChange(false);
-          }}
-        >
-          close
-        </button>
-      </div>
-      {loadingPercentage < 100 && (
-        <div
-          className={styles.progressBar}
-          style={{ width: `${loadingPercentage}%` }}
-        />
-      )}
-    </div>
-  );
-}
+import { Toast } from "./Toast";
 
 function App() {
   const [message, setMessage] = React.useState<string>("");

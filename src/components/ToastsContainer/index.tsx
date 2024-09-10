@@ -1,22 +1,17 @@
+import React from "react";
 import Toast from "../Toast";
+import { ToastContext } from "../ToastProvider/ToastProvider";
 import styles from "./ToastsContainer.module.css";
 
-function ToastsContainer({
-    onRemoveToast,
-    toasts,
-}: {
-    onRemoveToast: (id: string) => void;
-    toasts: {
-        id: string;
-        message: string;
-    }[];
-}) {
+function ToastsContainer() {
+
+    const {toasts} = React.useContext(ToastContext);
 
     return (
         <ol className={styles.wrapper}>
             {toasts.map((toast) => (
                 <li className={styles.toastWrapper} key={toast.id}>
-                    <Toast onRemoveToast={onRemoveToast} id={toast.id}>
+                    <Toast id={toast.id}>
                         {toast.message}
                     </Toast>
                 </li>

@@ -1,26 +1,17 @@
 import React from "react";
 import "./App.css";
 import ToastsContainer from "./components/ToastsContainer";
+import { ToastContext } from "./components/ToastProvider/ToastProvider";
 
 function App() {
   const [message, setMessage] = React.useState("");
-  const [toasts, setToasts] = React.useState<{
-    id: string;
-    message: string;
-}[]>([]);
+
+  const {createToast} = React.useContext(ToastContext);
 
   function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setToasts([...toasts, {
-      id: crypto.randomUUID(),
-      message,
-  }])
+    createToast(message);
   };
-
-  function handleRemoveToast (id: string) {
-    const newToasts = toasts.filter((toast) => toast.id !== id);
-    setToasts(newToasts);
-  }
 
   const handleTextareaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -50,7 +41,7 @@ function App() {
         </div>
         <button type="submit">Show toast</button>
       </form>
-       <ToastsContainer toasts={toasts} onRemoveToast={handleRemoveToast} />
+       <ToastsContainer />
     </main>
   );
 }

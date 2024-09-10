@@ -1,28 +1,35 @@
 import { useEffect, useState } from "react";
 import styles from "./Toast.module.css";
 import { X } from "react-feather";
+import { ToastContext } from "../ToastProvider/ToastProvider";
+import React from "react";
+
+const DURATION = 2000;
 
 function Toast({
+    duration = DURATION,
     id,
     children,
-    onRemoveToast,
 }: {
+    duration?: number;
     id: string;
     children: React.ReactNode;
-    onRemoveToast: (id: string) => void;
 }) {
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
 
+  const {handleRemoveToast} = React.useContext(ToastContext);
+
   useEffect(() => {
     const timer = setTimeout(() => {
-        onRemoveToast(id)
-    }, 5000);
+        console.log('remove')
+        handleRemoveToast(id)
+    }, duration);
     return () => {
       clearTimeout(timer);
     };
   }, [
     id,
-    onRemoveToast,
+    handleRemoveToast,
   ]);
 
   useEffect(() => {
@@ -33,7 +40,7 @@ function Toast({
         }
         return prev + 1;
       });
-    }, 50);
+    }, duration / 100);
     return () => {
       clearInterval(interval);
     };
@@ -45,7 +52,7 @@ function Toast({
         <button
           className={styles.closeButton}
           onClick={() => {
-            onRemoveToast(id);
+            handleRemoveToast(id);
           }}
         >
           <X size={16} />

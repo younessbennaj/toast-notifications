@@ -3,10 +3,10 @@ import styles from "./Toast.module.css";
 import { X } from "react-feather";
 
 function Toast({
-  message,
+    children,
   onOpenChange,
 }: {
-  message: string;
+    children: React.ReactNode;
   onOpenChange?: (isOpen: boolean) => void;
 }) {
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
@@ -36,7 +36,7 @@ function Toast({
   return (
     <div className={styles.toast}>
       <div>
-        <p>{message}</p>
+        <p>{children}</p>
         <button
           className={styles.closeButton}
           onClick={() => {

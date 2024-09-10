@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
-import { Toast } from "./Toast";
+import Toast from "./components/Toast";
+import ToastsContainer from "./components/ToastsContainer";
 
 function App() {
   const [message, setMessage] = React.useState<string>("");
@@ -39,7 +40,9 @@ function App() {
         </div>
         <button type="submit">Show toast</button>
       </form>
-      {isOpen && <Toast message={message} onOpenChange={setIsOpen} />}
+      {/* {isOpen && <Toast message={message} onOpenChange={setIsOpen} />}
+       */}
+       <ToastsContainer />
     </main>
   );
 }

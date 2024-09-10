@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import styles from "./Toast.module.css";
 import { X } from "react-feather";
 
-export function Toast({
+function Toast({
   message,
   onOpenChange,
 }: {
   message: string;
-  onOpenChange: (isOpen: boolean) => void;
+  onOpenChange?: (isOpen: boolean) => void;
 }) {
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      onOpenChange(false);
+        onOpenChange ? onOpenChange(false) : null;
     }, 5000);
     return () => {
       clearTimeout(timer);
@@ -40,7 +40,7 @@ export function Toast({
         <button
           className={styles.closeButton}
           onClick={() => {
-            onOpenChange(false);
+            onOpenChange ? onOpenChange(false) : null;
           }}
         >
           <X size={16} />
@@ -55,3 +55,5 @@ export function Toast({
     </div>
   );
 }
+
+export default Toast;

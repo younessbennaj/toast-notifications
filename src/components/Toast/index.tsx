@@ -3,22 +3,27 @@ import styles from "./Toast.module.css";
 import { X } from "react-feather";
 
 function Toast({
+    id,
     children,
-  onOpenChange,
+    onRemoveToast,
 }: {
+    id: string;
     children: React.ReactNode;
-  onOpenChange?: (isOpen: boolean) => void;
+    onRemoveToast: (id: string) => void;
 }) {
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-        onOpenChange ? onOpenChange(false) : null;
+        onRemoveToast(id)
     }, 5000);
     return () => {
       clearTimeout(timer);
     };
-  }, [onOpenChange]);
+  }, [
+    id,
+    onRemoveToast,
+  ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,7 +45,7 @@ function Toast({
         <button
           className={styles.closeButton}
           onClick={() => {
-            onOpenChange ? onOpenChange(false) : null;
+            onRemoveToast(id);
           }}
         >
           <X size={16} />

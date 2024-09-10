@@ -1,16 +1,26 @@
 import React from "react";
 import "./App.css";
-import Toast from "./components/Toast";
 import ToastsContainer from "./components/ToastsContainer";
 
 function App() {
-  const [message, setMessage] = React.useState<string>("");
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [message, setMessage] = React.useState("");
+  const [toasts, setToasts] = React.useState<{
+    id: string;
+    message: string;
+}[]>([]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsOpen(true);
+    setToasts([...toasts, {
+      id: crypto.randomUUID(),
+      message,
+  }])
   };
+
+  function handleRemoveToast (id: string) {
+    const newToasts = toasts.filter((toast) => toast.id !== id);
+    setToasts(newToasts);
+  }
 
   const handleTextareaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -40,9 +50,7 @@ function App() {
         </div>
         <button type="submit">Show toast</button>
       </form>
-      {/* {isOpen && <Toast message={message} onOpenChange={setIsOpen} />}
-       */}
-       <ToastsContainer />
+       <ToastsContainer toasts={toasts} onRemoveToast={handleRemoveToast} />
     </main>
   );
 }

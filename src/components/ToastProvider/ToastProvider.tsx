@@ -6,8 +6,9 @@ export const ToastContext = React.createContext<{
     handleRemoveToast: (id: string) => void,
     toasts: Toast[]
 }>({
-    createToast: () => {},
-    handleRemoveToast: () => {},
+    createToast: () => {throw new Error("createToast not implemented")},
+    // removeToast
+    handleRemoveToast: () => {throw new Error("handleRemoveToast not implemented")},
     toasts: [],
 });
 
@@ -16,21 +17,31 @@ function ToastProvider({
 } : {
     children: React.ReactNode;
 }) {
-    const [toasts, setToasts] = React.useState<Toast[]>([
-        {
-            id: crypto.randomUUID(),
-            message: "This is a toast message",
-        },
-    ]);
+    const [toasts, setToasts] = React.useState<Toast[]>([]);
 
+    /*
+    better approach
+    function createToast() {
+const newToast = {}
+setToast(currentToasts => [...currentToasts, newToast]
+}
+     */
+
+// => here use useCallback with toasts as dependency
     function createToast(message: string) {
+        const id = crypto.randomUUID()
         const newToasts = [...toasts, {
-            id: crypto.randomUUID(),
+            id,
             message,
         }];
         setToasts(newToasts);
+
+        setTimeout(() => {
+            handleRemoveToast(id)
+        }, 2000);
     }
 
+    // here same => use previous state 
     function handleRemoveToast (id: string) {
         const newToasts = toasts.filter((toast) => toast.id !== id);
         setToasts(newToasts);
@@ -39,6 +50,7 @@ function ToastProvider({
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key === "Escape") {
+                // just the last one
                 setToasts([]);
             }
         }

@@ -19,18 +19,18 @@ function Toast({
 
   const {handleRemoveToast} = React.useContext(ToastContext);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-        console.log('remove')
-        handleRemoveToast(id)
-    }, duration);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [
-    id,
-    handleRemoveToast,
-  ]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //       console.log('remove')
+  //       handleRemoveToast(id)
+  //   }, duration);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [
+  //   id,
+  //   handleRemoveToast,
+  // ]);
 
   useEffect(() => {
     const interval = setInterval(() => {

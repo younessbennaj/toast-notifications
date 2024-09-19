@@ -3,34 +3,28 @@ import styles from "./Toast.module.css";
 import { X } from "react-feather";
 import { ToastContext } from "../ToastProvider/ToastProvider";
 import React from "react";
-
-const DURATION = 2000;
+import {
+  COLORS_BY_VARIANT,
+  ICONS_BY_VARIANT,
+  TOAST_DURATION,
+} from "../../constants";
+import { Variant } from "../../types";
 
 function Toast({
-    duration = DURATION,
-    id,
-    children,
+  duration = TOAST_DURATION,
+  id,
+  children,
+  variant,
 }: {
-    duration?: number;
-    id: string;
-    children: React.ReactNode;
+  duration?: number;
+  id: string;
+  children: React.ReactNode;
+  variant: Variant;
 }) {
+  const Icon = ICONS_BY_VARIANT[variant as keyof typeof ICONS_BY_VARIANT];
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
 
-  const {handleRemoveToast} = React.useContext(ToastContext);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //       console.log('remove')
-  //       handleRemoveToast(id)
-  //   }, duration);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [
-  //   id,
-  //   handleRemoveToast,
-  // ]);
+  const { removeToast } = React.useContext(ToastContext);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,15 +38,17 @@ function Toast({
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [duration]);
+
   return (
     <div className={styles.toast}>
+      <Icon color={COLORS_BY_VARIANT[variant].iconColor} />
       <div>
         <p>{children}</p>
         <button
           className={styles.closeButton}
           onClick={() => {
-            handleRemoveToast(id);
+            removeToast(id);
           }}
         >
           <X size={16} />
@@ -61,7 +57,10 @@ function Toast({
       {loadingPercentage < 100 && (
         <div
           className={styles.progressBar}
-          style={{ width: `${loadingPercentage}%` }}
+          style={{
+            backgroundColor: COLORS_BY_VARIANT[variant].iconColor,
+            width: `${loadingPercentage}%`,
+          }}
         />
       )}
     </div>

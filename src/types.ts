@@ -1,4 +1,10 @@
+import { VARIANT_OPTIONS } from "./constants";
+
 export type Toast = {
-    id: string;
-    message: string;
-}
+  duration?: number;
+  id: string;
+  message: string;
+  variant: Variant;
+};
+
+export type Variant = (typeof VARIANT_OPTIONS)[number];

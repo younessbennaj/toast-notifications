@@ -2,16 +2,27 @@ import React from "react";
 import "./App.css";
 import ToastsContainer from "./components/ToastsContainer";
 import { ToastContext } from "./components/ToastProvider/ToastProvider";
+import { Variant } from "./types";
+import { VARIANT_OPTIONS } from "./constants";
 
 function App() {
   const [message, setMessage] = React.useState("");
+  const [variant, setVariant] = React.useState<Variant>("info");
 
-  const {createToast} = React.useContext(ToastContext);
+  function handleVariantChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setVariant(event.target.value);
+  }
 
-  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
+  const { createToast } = React.useContext(ToastContext);
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    createToast(message);
-  };
+    createToast({
+      duration: 5000,
+      message,
+      variant,
+    });
+  }
 
   const handleTextareaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -39,9 +50,24 @@ function App() {
             rows={5}
           />
         </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <label htmlFor="variant">Variant</label>
+          {VARIANT_OPTIONS.map((option) => (
+            <div key={option}>
+              <input
+                id={option}
+                type="radio"
+                name="variant"
+                value={option}
+                onChange={handleVariantChange}
+              />
+              <label htmlFor={option}>{option}</label>
+            </div>
+          ))}
+        </div>
         <button type="submit">Show toast</button>
       </form>
-       <ToastsContainer />
+      <ToastsContainer />
     </main>
   );
 }

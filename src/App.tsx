@@ -2,15 +2,14 @@ import React from "react";
 import "./App.css";
 import ToastsContainer from "./components/ToastsContainer";
 import { ToastContext } from "./components/ToastProvider/ToastProvider";
-import { Variant } from "./types";
-import { VARIANT_OPTIONS } from "./constants";
+import { Variant, VARIANT_OPTIONS } from "./constants";
 
 function App() {
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState<Variant>("info");
 
   function handleVariantChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setVariant(event.target.value);
+    setVariant(event.target.value as Variant);
   }
 
   const { createToast } = React.useContext(ToastContext);
@@ -18,7 +17,7 @@ function App() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     createToast({
-      duration: 5000,
+      duration: 2000,
       message,
       variant,
     });

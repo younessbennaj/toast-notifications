@@ -1,31 +1,15 @@
-import {
-  AlertOctagon,
-  AlertTriangle,
-  CheckCircle,
-  Icon,
-  Info,
-} from "react-feather";
+import { AlertOctagon, AlertTriangle, CheckCircle, Info } from "react-feather";
 
 export const TOAST_DURATION = 2000;
 
-export const ICONS_BY_VARIANT: {
-  notice: Icon;
-  warning: Icon;
-  success: Icon;
-  error: Icon;
-} = {
-  notice: Info,
+export const ICONS_BY_VARIANT = {
+  info: Info,
   warning: AlertTriangle,
   success: CheckCircle,
   error: AlertOctagon,
-};
+} as const;
 
-export const COLORS_BY_VARIANT: {
-  [key: string]: {
-    background: string;
-    iconColor: string;
-  };
-} = {
+export const COLORS_BY_VARIANT = {
   info: {
     background: "#bfdbfe",
     iconColor: "#2563eb",
@@ -42,6 +26,9 @@ export const COLORS_BY_VARIANT: {
     background: "#fecaca",
     iconColor: "#dc2626",
   },
-};
+} as const;
 
-export const VARIANT_OPTIONS = ["info", "success", "warning", "error"];
+// any key of COLORS_BY_VARIANT
+export const VARIANT_OPTIONS = Object.keys(COLORS_BY_VARIANT) as Array<Variant>;
+
+export type Variant = keyof typeof COLORS_BY_VARIANT;

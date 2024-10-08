@@ -7,8 +7,8 @@ import {
   COLORS_BY_VARIANT,
   ICONS_BY_VARIANT,
   TOAST_DURATION,
+  Variant,
 } from "../../constants";
-import { Variant } from "../../types";
 
 function Toast({
   duration = TOAST_DURATION,
@@ -21,7 +21,7 @@ function Toast({
   children: React.ReactNode;
   variant: Variant;
 }) {
-  const Icon = ICONS_BY_VARIANT[variant as keyof typeof ICONS_BY_VARIANT];
+  const Icon = ICONS_BY_VARIANT[variant];
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
 
   const { removeToast } = React.useContext(ToastContext);

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Toast, Variant } from "../../types";
-import { TOAST_DURATION } from "../../constants";
+import { Toast } from "../../types";
+import { TOAST_DURATION, Variant } from "../../constants";
 
 export const ToastContext = React.createContext<{
   createToast: ({

@@ -1,73 +1,156 @@
-import React from "react";
+import { useState } from "react";
 import "./App.css";
-import ToastsContainer from "./components/ToastsContainer";
-import { ToastContext } from "./components/ToastProvider/ToastProvider";
-import { Variant, VARIANT_OPTIONS } from "./constants";
+import ToastProvider, {
+  PositionType,
+} from "./components/ToastProvider/ToastProvider";
+
+import { TOAST_MESSAGES, VARIANT_OPTIONS } from "./constants";
+import { useToast } from "./useToast";
+
+function getRandomMessage() {
+  return TOAST_MESSAGES[Math.floor(Math.random() * TOAST_MESSAGES.length)];
+}
+
+function ToastCreator() {
+  const { createToast } = useToast();
+
+  return (
+    <button
+      className="primary-button"
+      onClick={() => createToast(getRandomMessage())}
+    >
+      Render a toast
+    </button>
+  );
+}
+
+function ToastTypes() {
+  const { createToast } = useToast();
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      <h3>Types</h3>
+      <p>
+        You can customize the type of toast you want to render, and pass an
+        options object as the second argument.
+      </p>
+
+      <ul
+        style={{
+          display: "flex",
+          gap: "1rem",
+          listStyle: "none",
+          padding: 0,
+          flexWrap: "wrap",
+        }}
+      >
+        {VARIANT_OPTIONS.map((variant) => (
+          <li key={variant}>
+            <button
+              onClick={() =>
+                createToast({
+                  variant,
+                  duration: 2000,
+                  message: `This is a ${variant} toast`,
+                })
+              }
+            >
+              {variant}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ToastsPosition({
+  onPositionChange,
+}: {
+  onPositionChange: (position: PositionType) => void;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      <h3>Position</h3>
+      <p>Swipe direction changes depending on the position.</p>
+
+      <ul
+        style={{
+          display: "flex",
+          gap: "1rem",
+          listStyle: "none",
+          padding: 0,
+          flexWrap: "wrap",
+        }}
+      >
+        {[
+          "top-left",
+          "top-right",
+          "bottom-left",
+          "bottom-right",
+          "top-center",
+          "bottom-center",
+        ].map((pos) => (
+          <li key={pos}>
+            <button onClick={() => onPositionChange(pos as PositionType)}>
+              {pos}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function App() {
-  const [message, setMessage] = React.useState("");
-  const [variant, setVariant] = React.useState<Variant>("info");
+  const [position, setPosition] = useState<PositionType>("top-right");
 
-  function handleVariantChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setVariant(event.target.value as Variant);
-  }
-
-  const { createToast } = React.useContext(ToastContext);
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    createToast({
-      duration: 2000,
-      message,
-      variant,
-    });
-  }
-
-  const handleTextareaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setMessage(event.target.value);
-  };
   return (
-    <main>
-      <h1>Toast notifications</h1>
-      <form onSubmit={handleSubmit}>
+    <ToastProvider position={position}>
+      <main>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            marginBottom: "1rem",
+            textAlign: "center",
+            marginBottom: "2rem",
           }}
         >
-          <label htmlFor="message">Message</label>
-          <textarea
-            autoFocus
-            id="message"
-            name="message"
-            onChange={handleTextareaChange}
-            value={message}
-            rows={5}
-          />
+          <h1
+            style={{
+              fontSize: "3rem",
+              marginBottom: "1rem",
+            }}
+          >
+            ToastJam
+          </h1>
+          <h2
+            style={{
+              marginBottom: "2rem",
+            }}
+          >
+            My opinionated toast component.
+          </h2>
+          <ToastCreator />
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="variant">Variant</label>
-          {VARIANT_OPTIONS.map((option) => (
-            <div key={option}>
-              <input
-                id={option}
-                type="radio"
-                name="variant"
-                value={option}
-                onChange={handleVariantChange}
-              />
-              <label htmlFor={option}>{option}</label>
-            </div>
-          ))}
-        </div>
-        <button type="submit">Show toast</button>
-      </form>
-      <ToastsContainer />
-    </main>
+        <ToastTypes />
+        <ToastsPosition
+          onPositionChange={(pos) => {
+            setPosition(pos);
+          }}
+        />
+      </main>
+    </ToastProvider>
   );
 }
 

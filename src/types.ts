@@ -1,6 +1,6 @@
 import { Variant } from "./constants";
 
-export type Toast = {
+export type ToastType = {
   duration?: number;
   id: string;
   message: string;

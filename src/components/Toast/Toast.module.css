@@ -1,13 +1,3 @@
-/* add slideIn animation from top to bottom */
-@keyframes slideIn {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 .closeButton {
   background: none;
   padding: 4px;
@@ -15,30 +5,32 @@
   justify-content: center;
   align-items: center;
   font-size: 8px;
-  position: absolute;
-  top: 4px;
-  right: 4px;
   border-radius: 2px;
+  margin-left: auto;
+  padding: 16px;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.closeButton:hover {
+  cursor: pointer;
 }
 
 .toast {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   border-radius: 8px;
-  padding: 16px 24px 20px 16px;
-  width: 300px;
-  position: relative;
+  width: 95vw;
   background-color: #fff;
   display: flex;
   align-items: center;
-  justify-items: center;
-  gap: 8px;
-}
+  justify-content: start;
+  border: 1px solid #f1f5f9;
 
-.progressBar {
-  height: 4px;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transition: width 0.1s;
+  span {
+    font-size: 14px;
+  }
+
+  @media (min-width: 768px) {
+    width: 300px;
+  }
 }

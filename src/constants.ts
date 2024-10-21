@@ -1,6 +1,6 @@
 import { AlertOctagon, AlertTriangle, CheckCircle, Info } from "react-feather";
 
-export const TOAST_DURATION = 2000;
+export const TOAST_DURATION = 10000;
 
 export const ICONS_BY_VARIANT = {
   info: Info,

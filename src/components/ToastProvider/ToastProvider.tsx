@@ -1,31 +1,37 @@
-import React, { useEffect } from "react";
-import { Toast } from "../../types";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { createContext, useState } from "react";
+import { ToastType } from "../../types";
+import Toast from "../Toast";
 import { TOAST_DURATION, Variant } from "../../constants";
+import styles from "./ToastProvider.module.css";
 
-export const ToastContext = React.createContext<{
+export const ToastContext = createContext<{
   createToast: ({
     message,
     duration,
     variant,
   }: {
     message: string;
-    duration?: number;
+    duration: number;
     variant: Variant;
   }) => void;
-  removeToast: (id: string) => void;
-  toasts: Toast[];
 }>({
   createToast: () => {
-    throw new Error("createToast not implemented");
+    throw new Error(
+      "You can't call showToast() outside of a <ToastProvider> – add it to your tree."
+    );
   },
-  removeToast: () => {
-    throw new Error("removeToast not implemented");
-  },
-  toasts: [],
 });
 
 function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toasts, setToasts] = React.useState<Toast[]>([]);
+  const [toasts, setToasts] = useState<ToastType[]>([
+    {
+      duration: 2000,
+      id: window.crypto.randomUUID(),
+      message: "Test",
+      variant: "info",
+    },
+  ]);
 
   function createToast({
     message,
@@ -38,42 +44,45 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
   }) {
     const newToast = {
       duration,
-      id: crypto.randomUUID(),
+      id: window.crypto.randomUUID(),
       message,
       variant,
     };
     setToasts((currentToasts) => [...currentToasts, newToast]);
-
-    setTimeout(() => {
-      removeToast(newToast.id);
-    }, duration);
   }
-
-  function removeToast(id: string) {
-    setToasts((currentToasts) =>
-      currentToasts.filter((toast) => toast.id !== id)
-    );
-  }
-
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        const lastToast = toasts[toasts.length - 1];
-        if (lastToast) {
-          removeToast(lastToast.id);
-        }
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [toasts]);
-
   return (
-    <ToastContext.Provider value={{ createToast, removeToast, toasts }}>
-      {children}
-    </ToastContext.Provider>
+    <>
+      <ul className={styles.wrapper}>
+        <AnimatePresence mode="popLayout">
+          {toasts.map((toast) => (
+            <motion.li
+              layout
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring" }}
+              className="box"
+              key={toast.id}
+            >
+              <Toast
+                duration={toast.duration}
+                variant={toast.variant}
+                id={toast.id}
+                onRemove={() => {
+                  const newToasts = toasts.filter((t) => t.id !== toast.id);
+                  setToasts(newToasts);
+                }}
+              >
+                {toast.message}
+              </Toast>
+            </motion.li>
+          ))}
+        </AnimatePresence>
+      </ul>
+      <ToastContext.Provider value={{ createToast }}>
+        {children}
+      </ToastContext.Provider>
+    </>
   );
 }
 

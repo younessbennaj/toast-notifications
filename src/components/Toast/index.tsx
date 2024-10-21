@@ -19,9 +19,18 @@ function Toast({
 
   return (
     <div className={styles.toast}>
-      <Icon color={COLORS_BY_VARIANT[variant].iconColor} />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Icon color={COLORS_BY_VARIANT[variant].iconColor} size={16} />
+      </div>
+
       <div>
-        <p>{children}</p>
+        <span>{children}</span>
         <button
           className={styles.closeButton}
           onClick={() => {

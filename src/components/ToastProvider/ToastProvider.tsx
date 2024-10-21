@@ -12,7 +12,7 @@ export const ToastContext = createContext<{
     variant,
   }: {
     message: string;
-    duration: number;
+    duration?: number;
     variant: Variant;
   }) => void;
 }>({

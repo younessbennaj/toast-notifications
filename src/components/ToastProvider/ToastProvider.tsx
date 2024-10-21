@@ -15,23 +15,42 @@ export const ToastContext = createContext<{
     duration?: number;
     variant: Variant;
   }) => void;
+  removeToast: (id: string) => void;
+  removeAllToasts: () => void;
 }>({
   createToast: () => {
     throw new Error(
       "You can't call showToast() outside of a <ToastProvider> – add it to your tree."
     );
   },
+  removeToast: () => {
+    throw new Error(
+      "You can't call removeToast() outside of a <ToastProvider> – add it to your tree."
+    );
+  },
+  removeAllToasts: () => {
+    throw new Error(
+      "You can't call removeAllToasts() outside of a <ToastProvider> – add it to your tree."
+    );
+  },
 });
 
-function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toasts, setToasts] = useState<ToastType[]>([
-    {
-      duration: 2000,
-      id: window.crypto.randomUUID(),
-      message: "Test",
-      variant: "info",
-    },
-  ]);
+export type PositionType =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right"
+  | "top-center"
+  | "bottom-center";
+
+function ToastProvider({
+  children,
+  position = "top-right",
+}: {
+  children: React.ReactNode;
+  position?: PositionType;
+}) {
+  const [toasts, setToasts] = useState<ToastType[]>([]);
 
   function createToast({
     message,
@@ -72,6 +91,10 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  const removeAllToasts = React.useCallback(() => {
+    setToasts([]);
+  }, [setToasts]);
+
   // use useCallback to memoize the function so that it doesn't change on every render and create new timer inside toast
   const removeToast = React.useCallback(
     (id: string) => {
@@ -84,7 +107,20 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <ul className={styles.wrapper}>
+      <ul
+        className={styles.wrapper}
+        style={{
+          top: position.startsWith("top") ? "1rem" : "auto",
+          bottom: position.startsWith("bottom") ? "1rem" : "auto",
+          left: position.endsWith("left")
+            ? "1rem"
+            : position.endsWith("center")
+            ? "50%"
+            : "auto",
+          right: position.endsWith("right") ? "1rem" : "auto",
+          transform: position.endsWith("center") ? "translateX(-50%)" : "none", // Corrected to translate to the left for centering
+        }}
+      >
         <AnimatePresence mode="popLayout">
           {toasts.map((toast) => (
             <motion.li
@@ -108,7 +144,9 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
           ))}
         </AnimatePresence>
       </ul>
-      <ToastContext.Provider value={{ createToast }}>
+      <ToastContext.Provider
+        value={{ createToast, removeToast, removeAllToasts }}
+      >
         {children}
       </ToastContext.Provider>
     </>

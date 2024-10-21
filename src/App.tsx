@@ -1,137 +1,156 @@
-// import { useState } from "react";
+import { useState } from "react";
 import "./App.css";
+import ToastProvider, {
+  PositionType,
+} from "./components/ToastProvider/ToastProvider";
 
-import { VARIANT_OPTIONS } from "./constants";
-import { ToastType } from "./types";
+import { TOAST_MESSAGES, VARIANT_OPTIONS } from "./constants";
 import { useToast } from "./useToast";
 
-const toastMessages = [
-  { variant: "info", message: "Your profile has been updated successfully." },
-  { variant: "success", message: "You have successfully logged in!" },
-  { variant: "error", message: "An error occurred while saving your changes." },
-  {
-    variant: "warning",
-    message: "Your session is about to expire. Please save your work!",
-  },
-  {
-    variant: "info",
-    message: "A new version is available. Refresh to update.",
-  },
-  {
-    variant: "success",
-    message: "Your password has been changed successfully.",
-  },
-  {
-    variant: "error",
-    message: "Failed to connect to the server. Please try again later.",
-  },
-  {
-    variant: "warning",
-    message: "Storage almost full! Consider freeing up some space.",
-  },
-  { variant: "info", message: "You have new notifications waiting." },
-  { variant: "success", message: "Your order has been placed successfully!" },
-  {
-    variant: "error",
-    message: "Payment failed. Please check your payment details.",
-  },
-  {
-    variant: "warning",
-    message: "Password strength is weak. Consider using a stronger password.",
-  },
-  { variant: "info", message: "New messages in your inbox." },
-  { variant: "success", message: "File uploaded successfully!" },
-  { variant: "error", message: "File upload failed. Please try again." },
-  {
-    variant: "warning",
-    message: "You have unsaved changes. Be sure to save before exiting.",
-  },
-  { variant: "info", message: "Settings updated successfully." },
-  { variant: "success", message: "You’ve been subscribed to our newsletter." },
-  {
-    variant: "error",
-    message: "Login attempt failed. Please check your credentials.",
-  },
-  { variant: "warning", message: "You are nearing your API request limit." },
-] as ToastType[];
-
 function getRandomMessage() {
-  return toastMessages[Math.floor(Math.random() * toastMessages.length)];
+  return TOAST_MESSAGES[Math.floor(Math.random() * TOAST_MESSAGES.length)];
 }
 
-function App() {
+function ToastCreator() {
   const { createToast } = useToast();
 
   return (
-    <main>
-      <div
+    <button
+      className="primary-button"
+      onClick={() => createToast(getRandomMessage())}
+    >
+      Render a toast
+    </button>
+  );
+}
+
+function ToastTypes() {
+  const { createToast } = useToast();
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      <h3>Types</h3>
+      <p>
+        You can customize the type of toast you want to render, and pass an
+        options object as the second argument.
+      </p>
+
+      <ul
         style={{
-          textAlign: "center",
-          marginBottom: "2rem",
+          display: "flex",
+          gap: "1rem",
+          listStyle: "none",
+          padding: 0,
+          flexWrap: "wrap",
         }}
       >
-        <h1
+        {VARIANT_OPTIONS.map((variant) => (
+          <li key={variant}>
+            <button
+              onClick={() =>
+                createToast({
+                  variant,
+                  duration: 2000,
+                  message: `This is a ${variant} toast`,
+                })
+              }
+            >
+              {variant}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ToastsPosition({
+  onPositionChange,
+}: {
+  onPositionChange: (position: PositionType) => void;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      <h3>Position</h3>
+      <p>Swipe direction changes depending on the position.</p>
+
+      <ul
+        style={{
+          display: "flex",
+          gap: "1rem",
+          listStyle: "none",
+          padding: 0,
+          flexWrap: "wrap",
+        }}
+      >
+        {[
+          "top-left",
+          "top-right",
+          "bottom-left",
+          "bottom-right",
+          "top-center",
+          "bottom-center",
+        ].map((pos) => (
+          <li key={pos}>
+            <button onClick={() => onPositionChange(pos as PositionType)}>
+              {pos}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function App() {
+  const [position, setPosition] = useState<PositionType>("top-right");
+
+  return (
+    <ToastProvider position={position}>
+      <main>
+        <div
           style={{
-            fontSize: "3rem",
-            marginBottom: "1rem",
-          }}
-        >
-          ToastJam
-        </h1>
-        <h2
-          style={{
+            textAlign: "center",
             marginBottom: "2rem",
           }}
         >
-          My opinionated toast component.
-        </h2>
-        <button
-          className="primary-button"
-          onClick={() => createToast(getRandomMessage())}
-        >
-          Render a toast
-        </button>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-        }}
-      >
-        <h3>Types</h3>
-        <p>
-          You can customize the type of toast you want to render, and pass an
-          options object as the second argument.
-        </p>
-
-        <ul
-          style={{
-            display: "flex",
-            gap: "1rem",
-            listStyle: "none",
-            padding: 0,
-            flexWrap: "wrap",
+          <h1
+            style={{
+              fontSize: "3rem",
+              marginBottom: "1rem",
+            }}
+          >
+            ToastJam
+          </h1>
+          <h2
+            style={{
+              marginBottom: "2rem",
+            }}
+          >
+            My opinionated toast component.
+          </h2>
+          <ToastCreator />
+        </div>
+        <ToastTypes />
+        <ToastsPosition
+          onPositionChange={(pos) => {
+            setPosition(pos);
           }}
-        >
-          {VARIANT_OPTIONS.map((variant) => (
-            <li key={variant}>
-              <button
-                onClick={() =>
-                  createToast({
-                    variant,
-                    duration: 2000,
-                    message: `This is a ${variant} toast`,
-                  })
-                }
-              >
-                {variant}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </main>
+        />
+      </main>
+    </ToastProvider>
   );
 }
 

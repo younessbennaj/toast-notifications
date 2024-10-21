@@ -19,13 +19,18 @@
 .toast {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   border-radius: 8px;
-  width: 300px;
+  width: 95vw;
   background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: start;
+  border: 1px solid #f1f5f9;
 
   span {
     font-size: 14px;
+  }
+
+  @media (min-width: 768px) {
+    width: 300px;
   }
 }

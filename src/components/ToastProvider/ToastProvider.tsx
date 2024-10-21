@@ -50,6 +50,38 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
     };
     setToasts((currentToasts) => [...currentToasts, newToast]);
   }
+
+  // remove toast on escape key press
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setToasts((currentToasts) => {
+          const lastToast = currentToasts[currentToasts.length - 1];
+          if (lastToast) {
+            return currentToasts.filter((t) => t.id !== lastToast.id);
+          }
+          return currentToasts;
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // use useCallback to memoize the function so that it doesn't change on every render and create new timer inside toast
+  const removeToast = React.useCallback(
+    (id: string) => {
+      setToasts((previousToasts) => {
+        return previousToasts.filter((t) => t.id !== id);
+      });
+    },
+    [setToasts]
+  );
+
   return (
     <>
       <ul className={styles.wrapper}>
@@ -68,10 +100,7 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
                 duration={toast.duration}
                 variant={toast.variant}
                 id={toast.id}
-                onRemove={() => {
-                  const newToasts = toasts.filter((t) => t.id !== toast.id);
-                  setToasts(newToasts);
-                }}
+                onRemove={removeToast}
               >
                 {toast.message}
               </Toast>

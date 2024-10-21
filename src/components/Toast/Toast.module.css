@@ -5,22 +5,25 @@
   justify-content: center;
   align-items: center;
   font-size: 8px;
-  position: absolute;
-  top: 4px;
-  right: 4px;
   border-radius: 2px;
+  margin-left: auto;
+  padding: 16px;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.closeButton:hover {
+  cursor: pointer;
 }
 
 .toast {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   border-radius: 8px;
-  padding: 16px 30px 20px 16px;
   width: 300px;
-  position: relative;
   background-color: #fff;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: start;
 
   span {
     font-size: 14px;

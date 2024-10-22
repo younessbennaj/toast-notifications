@@ -76,13 +76,7 @@ function ToastsPosition({
   onPositionChange: (position: PositionType) => void;
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-      }}
-    >
+    <div className="toasts-position">
       <h3>Position</h3>
       <p>Swipe direction changes depending on the position.</p>
 

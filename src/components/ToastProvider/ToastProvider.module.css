@@ -10,6 +10,15 @@
   margin: 0;
   width: 95vw;
 
+  @media screen and (max-width: 768px) {
+    /* on mobile devices, notifications will be displayed ONLY on bottom-center of the screen */
+    position: fixed !important;
+    top: auto !important;
+    bottom: 16px !important;
+    right: 50% !important;
+    transform: translateX(50%) !important;
+  }
+
   @media (min-width: 768px) {
     width: 340px;
   }

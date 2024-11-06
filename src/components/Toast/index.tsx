@@ -23,7 +23,7 @@ function Toast({
       if (onRemove) {
         onRemove(id);
       }
-    }, 5000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, [onRemove, id]);

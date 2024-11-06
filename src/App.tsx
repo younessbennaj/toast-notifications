@@ -1,11 +1,10 @@
 import { useState } from "react";
 import "./App.css";
-import ToastProvider, {
-  PositionType,
-} from "./components/ToastProvider/ToastProvider";
 
 import { TOAST_MESSAGES, VARIANT_OPTIONS } from "./constants";
 import { useToast } from "./useToast";
+import { PositionType } from "./types";
+import ToastProvider from "./components/ToastProvider/ToastProvider";
 
 function getRandomMessage() {
   return TOAST_MESSAGES[Math.floor(Math.random() * TOAST_MESSAGES.length)];

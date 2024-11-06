@@ -1,7 +1,7 @@
 import { AlertOctagon, AlertTriangle, CheckCircle, Info } from "react-feather";
 import { ToastType } from "./types";
 
-export const TOAST_DURATION = 10000;
+export const DEFAULT_TOAST_DURATION = 10000;
 
 export const ICONS_BY_VARIANT = {
   info: Info,

@@ -1,0 +1,25 @@
+.wrapper {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 95vw;
+
+  @media screen and (max-width: 768px) {
+    /* on mobile devices, notifications will be displayed ONLY on bottom-center of the screen */
+    position: fixed !important;
+    top: auto !important;
+    bottom: 16px !important;
+    right: 50% !important;
+    transform: translateX(50%) !important;
+  }
+
+  @media (min-width: 768px) {
+    width: 340px;
+  }
+}
